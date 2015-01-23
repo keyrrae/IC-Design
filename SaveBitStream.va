@@ -1,0 +1,51 @@
+`include  "discipline.h"
+`include  "constants.h" 
+
+module SaveBitStream (din, clk, dout);
+ input   din, clk;
+ electrical din, clk;
+
+ output  dout;
+ electrical  dout;
+
+  parameter real vmax = 3;
+  parameter real vmin = 0;
+  parameter real slack = 10.0p from (0:inf);
+  parameter real trise = 1.0n from (0:inf);
+  parameter real tfall = 1.0n from (0:inf);
+  parameter real tconv = 1.0n from [0:inf);
+
+     real vth, vtl;
+     real binvalue;
+	 integer fbits;
+
+    analog begin
+
+      @(initial_step or initial_step("dc", "ac", "tran", "xf"))  begin
+        vth = (vmax - vmin) * 2.0 / 3.0;
+        vtl = (vmax - vmin) / 3.0;
+        binvalue = 0 ;
+		fbits = $fopen("~/bitstream.txt");
+      end
+
+      @(cross ( V(clk)-vth,  1, slack, clk.potential.abstol)) 
+          if (V(din) > vth) begin 
+		  	binvalue = 1;
+			$fdisplay(fbits,"1");
+		  end
+		  else if (V(din) < vtl) begin
+		  	binvalue = 0;
+			$fdisplay(fbits,"0");
+		  end
+		  else begin
+		  	binvalue = 0.5;
+			$fdisplay(fbits,"X");
+		  end
+
+
+      V(dout)  <+   transition ( binvalue*vmax , tconv, trise, tfall );
+	  @(final_step) $fclose(fbits);
+
+    end				
+endmodule
+
