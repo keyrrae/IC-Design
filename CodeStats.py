@@ -8,9 +8,9 @@ for root, dirs, files in os.walk(".."):
         filenames.append(str(os.path.join(root, name)))
 
 
-keys = ['py', 'go', 'c', 'cpp', 'java', 'r', 'm', 'hs']
+keys = ['py', 'go', 'c', 'cpp', 'java', 'r', 'm', 'hs', 'scala']
 progName = ['Python :\t', 'Go :\t', 'C :\t', 'C++ :\t', 'Java :\t',
-            'R :\t', 'Matlab :\t', 'Haskell :\t']
+            'R :\t', 'Matlab :\t', 'Haskell :\t', 'Scala :\t']
 dic1 = {key: 0 for key in keys}
 dic2 = {keys[i]: progName[i] for i in xrange(len(keys))}
 #print dic
