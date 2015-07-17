@@ -1,0 +1,21 @@
+`include "constants.vams"
+`include "disciplines.vams"
+
+module saveResult (vin);
+	input vin;
+ 	electrical vin;
+	integer fbits;
+
+    analog begin
+
+      	@(initial_step or initial_step("dc", "ac", "tran"))  begin
+			fbits = $fopen("./trimmedVal.txt");
+      	end
+
+	  	@(final_step) begin
+	  		$fdisplay(fbits,"%2.10f",V(vin));
+			$fclose(fbits);
+		end	
+
+    end				
+endmodule
